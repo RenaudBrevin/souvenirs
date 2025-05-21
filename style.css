@@ -33,7 +33,7 @@ h1 {
 #game-container canvas {
     border: 2px solid #fff;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-    max-height: 80vh;
+    max-height: 70vh;
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
@@ -56,6 +56,26 @@ h1 {
     opacity: 0.7;
     visibility: visible;
     animation: pulseOpacity 2s ease-in-out infinite;
+}
+
+#outro-button {
+    background-color: transparent; border: 1px solid white; border-radius: 8px; 
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    color: white; padding: 10px 20px;
+    border-radius: 10px; max-width: 80%; text-align: center; font-size: 1.3em;
+    opacity: 0; pointer-events: none; z-index: 1001;
+}
+
+#outro-button.visible {
+    opacity: 0.7;
+    pointer-events: auto;
+    visibility: visible;
+    animation: pulseOpacity 2s ease-in-out infinite;
+}
+#outro-button.hide {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
 }
 
 #start-container {
@@ -117,4 +137,50 @@ h1 {
     border: none;
     animation: pulseOpacity 2s ease-in-out infinite;
 }
+
+.hidden {
+    display: none;
+  }
   
+  #outro-container {
+    transition: opacity 2s ease;
+    opacity: 0;
+  }
+  
+  #outro-container.visible {
+    display: block;
+    opacity: 1;
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    z-index: 1000;
+    pointer-events: none;
+    transition: opacity 2s ease;
+  }
+  
+  .overlay-text {
+    font-size: 1.5rem;
+    max-width: 80%;
+    text-align: center;
+    line-height: 1.6;
+  }
+  
+  .overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .overlay.hidden {
+    display: none;
+  }
+    

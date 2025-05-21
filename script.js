@@ -7,8 +7,8 @@ var piecesDone = 0;
 var pieces = [];
 var originalImage = null;
 var pieceCanvases = [];
-var rows = 3;
-var columns = 3;
+var rows = 1;
+var columns = 1;
 var puzzleComplete = false;
 var gameReady = false;
 var currentImageIndex = 1;
@@ -23,9 +23,9 @@ const imagePaths = [
 ];
 
 const imageDescriptions = [
-    `Souvenir 1 : Un moment suspendu dans le temps, gravé dans les couleurs du passé.`,
-    `Souvenir 2 : La chaleur d’un instant partagé, que seule la mémoire peut raviver.`,
-    `Souvenir 3 : Des fragments d’émotion que le présent effleure encore.`
+    `Souvenir d'une réunion de famille de 1900, empreint du silence d’instants révolus que seul le papier a su retenir.`,
+    `Souvenir d’un frère et d’une sœur jouant dans les champs, insouciants et libres, pendant que le monde des grands s’affaire au loin, à l’abri de leur bulle d’enfance.`,
+    `Souvenirs d’un moment suspendu, où deux âmes complices se retrouvent autour d’un verre en terrasse, le cœur léger, comme si le temps n’avait jamais passé.`
 ];
 
 const overlay = document.getElementById('intro-overlay');
@@ -45,7 +45,6 @@ discoverBtn.addEventListener('click', () => {
       });
   
     overlay.classList.add('hidden');
-    storyText.style.display = 'block';
   });
   
 
@@ -498,24 +497,55 @@ function hideDescriptionText() {
     }, 1000);
 }
 
-const endText = 'texte ici';
+const endText = 'Les images brisées ont retrouvé leur unité. Et si tes propres souvenirs, eux aussi, attendaient d’être rassemblés ? Laisse les fragments remonter doucement. Prends le temps de les accueillir. Et de te souvenir.';
 const body = document.body;
 const gameContainer = document.getElementById('game-container');
 
 function outroduction() {
-    body.style.backgroundColor = '#000';
-    gameContainer.classList.add('fade-out');
+    const outroButton = document.getElementById('outro-button');
+        gameContainer.classList.add('fade-out');
+        outroButton.classList.add('visible');
 
-    gameContainer.addEventListener('transitionend', () => {
-        gameContainer.style.display = 'none';
-        introContainer.classList.remove('fade-out');
-        introContainer.style.display = 'flex';
-    }, { once: true });
+        outroButton.addEventListener('click', () => {
+            outroButton.classList.remove('visible');
+            outroButton.classList.add('hide');
+            const audio = document.getElementById('outro-voix');
+            audio.volume = 1;
+            setTimeout(() => {
+                audio.play()
+                    .then(() => {
+                        console.log('Audio lancé avec succès');
+                    })
+                    .catch(err => {
+                        console.error('Erreur lors de la lecture audio :', err);
+                    });
+            }, 1000);
+            
+            body.style.backgroundColor = '#000';
+            gameContainer.classList.add('fade-out');
+            gameContainer.style.display = 'none';
+            const outroContainer = document.getElementById('outro-container');
+            outroContainer.classList.remove('fade-out');
+            outroContainer.style.display = 'flex';
+            outroContainer.style.opacity = '1';
 
-
-    if (currentChar < endText.length) {
-        introContainer.textContent += endText.charAt(currentChar);
-        currentChar++;
-        setTimeout(typeWriter, 50);
-    }
+            //add write effect with #outro-text
+            const outroText = document.getElementById('outro-text');
+            const storyText = 'Les images brisées ont retrouvé leur unité. Et si tes propres souvenirs, eux aussi, attendaient d’être rassemblés ? Laisse les fragments remonter doucement. Prends le temps de les accueillir. Et de te souvenir.';
+            outroText.textContent = '';
+            let outroCharIndex = 0;
+            function outroTypeNextChar() {
+                if (outroCharIndex < endText.length) {
+                    outroText.textContent += endText.charAt(outroCharIndex);
+                    outroCharIndex++;
+                    setTimeout(outroTypeNextChar, 75);
+                }
+            }
+            
+            // Lancement avec un délai de 1000 ms avant de commencer la frappe
+            setTimeout(outroTypeNextChar, 1000);
+            
+    });
 }
+// Fin de l'animation de transition
+// 
