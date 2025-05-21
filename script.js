@@ -170,7 +170,15 @@ function createPuzzlePieces() {
         let piece = myGame.add.image(x, y, 'piece_' + i)
             .setInteractive({ draggable: true })
             .setOrigin(0)
-            .setDepth(1);
+            .setDepth(1)
+            .setAlpha(0);
+
+        myGame.tweens.add({
+            targets: piece,
+            alpha: 1,
+            duration: 3000,
+            ease: 'Power2'
+        });
 
         piece.pIndex = i;
         piece.displayWidth = pieceWidth;
@@ -185,8 +193,8 @@ function createPuzzlePieces() {
 
         // Stocker direction et amplitude pour redémarrage
         const floatDirection = Phaser.Math.Between(0, 1) === 0 ? 'x' : 'y';
-        const floatAmount = Phaser.Math.Between(3, 6);
-        const floatDelay = Phaser.Math.Between(0, 300);
+        const floatAmount = Phaser.Math.Between(3, 8);
+        const floatDelay = Phaser.Math.Between(0, 500);
 
         piece._floatProps = { dir: floatDirection, amt: floatAmount, delay: floatDelay };
 
@@ -194,7 +202,7 @@ function createPuzzlePieces() {
         piece._floatTween = myGame.tweens.add({
             targets: piece,
             [floatDirection]: piece[floatDirection] + floatAmount,
-            duration: 1000,
+            duration: 2000,
             yoyo: true,
             repeat: -1,
             ease: 'Sine.easeInOut',
@@ -232,14 +240,15 @@ function createPuzzlePieces() {
 
             gameObject.isPlaced = true;
 
-            new Audio('sound/clips.mp3').play()
+            new Audio('sound/clips.mp3').play();
 
-            // Nettoyer flottement
+            // Réduire la profondeur pour qu'elle passe sous les autres pièces
+            gameObject.setDepth(0); // profondeur minimale
+
             if (gameObject._floatTween) {
                 gameObject._floatTween.stop();
             }
 
-            // Supprimer ombre si appliquée
             if (gameObject.context) {
                 gameObject.context.shadowColor = 'rgba(0,0,0,0)';
                 gameObject.context.shadowBlur = 0;
@@ -250,7 +259,6 @@ function createPuzzlePieces() {
                 showColorizedImage();
             }
         } else {
-            // Reprendre flottement si non placé
             if (!gameObject.isPlaced && gameObject._floatProps) {
                 const { dir, amt, delay } = gameObject._floatProps;
                 gameObject._floatTween = myGame.tweens.add({
@@ -265,6 +273,7 @@ function createPuzzlePieces() {
             }
         }
     });
+
 
     gameReady = true;
 }
@@ -288,7 +297,7 @@ function showColorizedImage() {
         myGame.tweens.add({
             targets: myGame.children.list.filter(obj => obj.type === 'Image' && obj !== bgImage),
             alpha: 0,
-            duration: 6000,
+            duration: 4000,
             ease: 'Power2'
         });
         myGame.tweens.add({
@@ -323,7 +332,7 @@ function fadeToNextImage() {
     myGame.tweens.add({
         targets: myGame.children.list,
         alpha: 0,
-        duration: 1000,
+        duration: 4000,
         ease: 'Power2',
         onComplete: function () {
             // Passer à l'image suivante
@@ -358,9 +367,9 @@ function resetGame() {
 
 
 // const storyText =
-//     `
+//     
 // Chaque souvenir est comme une photo éclatée en mille fragments, parfois flous, parfois déformés par le temps. Comme les pièces d’un puzzle que l’on assemble patiemment, c’est en reconnectant chaque détail que se révèle la mémoire.
-// `;
+// ;
 
 const storyText = 'texte ici';
 
