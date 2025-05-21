@@ -7,18 +7,19 @@ var piecesDone = 0;
 var pieces = [];
 var originalImage = null;
 var pieceCanvases = [];
-var rows = 1;
-var columns = 2;
+var rows = 3;
+var columns = 3;
 var puzzleComplete = false;
 var gameReady = false;
 var currentImageIndex = 1;
 var transitionTimer = null;
+var currentAudio = null;
 
 // Tableau des images à afficher dans l'ordre
 const imagePaths = [
-    { original: 'images/image1.webp', colorized: 'images/image1_colorized.webp' },
-    { original: 'images/image2.webp', colorized: 'images/image2_colorized.webp' },
-    { original: 'images/image3.webp', colorized: 'images/image3_colorized.webp' }
+    { original: 'images/image1.webp', colorized: 'images/image1_colorized.webp', sound: 'sound/sound1.mp3' },
+    { original: 'images/image2.webp', colorized: 'images/image2_colorized.webp', sound: 'sound/sound2.mp3' },
+    { original: 'images/image3.webp', colorized: 'images/image3_colorized.webp', sound: 'sound/sound3.mp3' }
 ];
 
 const imageDescriptions = [
@@ -46,7 +47,9 @@ function setupPiecesPositions() {
 }
 
 // Gestionnaire pour le bouton "Démarrer"
-document.getElementById('startButton').addEventListener('click', function () {
+document.getElementById('startButton').addEventListener('click', function (e) {
+    console.log(e)
+    e.target.style.display = 'none';
     startGame();
 });
 
@@ -313,10 +316,17 @@ function showColorizedImage() {
             duration: 3000,
             ease: 'Power2',
             onComplete: () => {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+
+                currentAudio = new Audio(imagePaths[currentImageIndex - 1].sound);
+                currentAudio.volume = 1;
+                currentAudio.play();
+
                 showDescriptionText(currentImageIndex - 1);
                 transitionTimer = setTimeout(fadeToNextImage, 6000);
-                transitionTimer = setTimeout(fadeToNextImage, 6000);
-
             }
         });
     };
@@ -346,7 +356,25 @@ function fadeToNextImage() {
         duration: 4000,
         ease: 'Power2',
         onComplete: function () {
-            currentImageIndex = (currentImageIndex % imagePaths.length) + 1;
+            // Estomper le son
+            if (currentAudio) {
+                let fadeInterval = setInterval(() => {
+                    if (currentAudio.volume > 0.05) {
+                        currentAudio.volume -= 0.05;
+                    } else {
+                        currentAudio.volume = 0;
+                        currentAudio.pause();
+                        clearInterval(fadeInterval);
+                    }
+                }, 200);
+            }
+
+            currentImageIndex++;
+
+            if (currentImageIndex > imagePaths.length) {
+                outroduction();
+                return;
+            }
 
             if (game) {
                 game.destroy(true);
@@ -356,6 +384,7 @@ function fadeToNextImage() {
             loadImage(imagePaths[currentImageIndex - 1].original);
         }
     });
+
 }
 
 // Fonction pour redémarrer le jeu ou passer manuellement à l'image suivante
@@ -374,12 +403,12 @@ function resetGame() {
 }
 
 
-// const storyText =
-//     
-// Chaque souvenir est comme une photo éclatée en mille fragments, parfois flous, parfois déformés par le temps. Comme les pièces d’un puzzle que l’on assemble patiemment, c’est en reconnectant chaque détail que se révèle la mémoire.
-// ;
+const storyText =
+    `
+Chaque souvenir est comme une photo éclatée en mille fragments, parfois flous, parfois déformés par le temps. Comme les pièces d’un puzzle que l’on assemble patiemment, c’est en reconnectant chaque détail que se révèle la mémoire.
+`;
 
-const storyText = 'texte ici';
+// const storyText = 'texte ici';
 
 const introTextEl = document.getElementById('intro-text');
 const startBtn = document.getElementById('startButton');
@@ -440,7 +469,27 @@ function hideDescriptionText() {
     setTimeout(() => {
         container.style.display = 'none';
         container.classList.remove('hidden');
-    }, 1000); // correspond à la durée du `transition` CSS
+    }, 1000);
 }
 
+const endText = 'texte ici';
+const body = document.body;
+const gameContainer = document.getElementById('game-container');
 
+function outroduction() {
+    body.style.backgroundColor = '#000';
+    gameContainer.classList.add('fade-out');
+
+    gameContainer.addEventListener('transitionend', () => {
+        gameContainer.style.display = 'none';
+        introContainer.classList.remove('fade-out');
+        introContainer.style.display = 'flex';
+    }, { once: true });
+
+
+    if (currentChar < endText.length) {
+        introContainer.textContent += endText.charAt(currentChar);
+        currentChar++;
+        setTimeout(typeWriter, 50);
+    }
+}

@@ -11,6 +11,7 @@ body {
     align-items: center;
     width: 100vw;
     height: 100vh;
+    transition: background-color 1s ease;
 }
 
 h1 {
@@ -25,14 +26,16 @@ h1 {
     align-items: center;
     margin: auto;
     position: relative;
+    transition: opacity 1s ease;
+    opacity: 1;
 }
 
 #game-container canvas {
     border: 2px solid #fff;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    max-height: 80vh;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 
