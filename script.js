@@ -21,6 +21,13 @@ const imagePaths = [
     { original: 'images/image3.webp', colorized: 'images/image3_colorized.webp' }
 ];
 
+const imageDescriptions = [
+    `Souvenir 1 : Un moment suspendu dans le temps, gravé dans les couleurs du passé.`,
+    `Souvenir 2 : La chaleur d’un instant partagé, que seule la mémoire peut raviver.`,
+    `Souvenir 3 : Des fragments d’émotion que le présent effleure encore.`
+];
+
+
 function setupPiecesPositions() {
     pieces = [];
     var pieceWidth = Math.floor(currentWidth / columns);
@@ -306,7 +313,10 @@ function showColorizedImage() {
             duration: 3000,
             ease: 'Power2',
             onComplete: () => {
-                transitionTimer = setTimeout(fadeToNextImage, 3000);
+                showDescriptionText(currentImageIndex - 1); 
+                transitionTimer = setTimeout(fadeToNextImage, 6000);
+                transitionTimer = setTimeout(fadeToNextImage, 6000);
+
             }
         });
     };
@@ -322,29 +332,27 @@ function showColorizedImage() {
 
 
 function fadeToNextImage() {
-    // Arrêter tout timer existant
     if (transitionTimer) {
         clearTimeout(transitionTimer);
         transitionTimer = null;
     }
 
-    // Faire disparaître la scène actuelle
+    // Cacher la description AVANT le chargement de la prochaine image
+    hideDescriptionText();
+
     myGame.tweens.add({
         targets: myGame.children.list,
         alpha: 0,
         duration: 4000,
         ease: 'Power2',
         onComplete: function () {
-            // Passer à l'image suivante
             currentImageIndex = (currentImageIndex % imagePaths.length) + 1;
 
-            // Détruire le jeu actuel et démarrer un nouveau
             if (game) {
                 game.destroy(true);
                 gameReady = false;
             }
 
-            // Charger la nouvelle image
             loadImage(imagePaths[currentImageIndex - 1].original);
         }
     });
@@ -401,3 +409,39 @@ startBtn.addEventListener('click', () => {
 });
 
 typeWriter();
+
+function showDescriptionText(index) {
+    const descriptionContainer = document.getElementById('description-container');
+    const descriptionText = document.getElementById('description-text');
+    const fullText = imageDescriptions[index];
+    
+    descriptionText.textContent = '';
+    descriptionContainer.style.display = 'block';
+
+    let charIndex = 0;
+    function typeNextChar() {
+        if (charIndex < fullText.length) {
+            descriptionText.textContent += fullText.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeNextChar, 20);
+        }
+    }
+
+    typeNextChar();
+}
+
+function hideDescriptionText() {
+    const container = document.getElementById('description-container');
+    const text = document.getElementById('description-text');
+
+    text.textContent = '';
+    container.classList.add('hidden');
+
+    setTimeout(() => {
+        container.style.display = 'none';
+        container.classList.remove('hidden');
+    }, 1000); // correspond à la durée du `transition` CSS
+}
+
+
+

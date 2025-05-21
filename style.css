@@ -20,7 +20,7 @@ h1 {
 }
 
 #game-container {
-    max-height: 90vh;
+    max-height: 80vh;
     max-width: 90vw;
     display: flex;
     justify-content: center;
@@ -34,6 +34,13 @@ canvas{
     top: 50%;
     left: 50%;
 }
+#game-container canvas {
+    max-width: 100%;
+    max-height: 100%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
 
 #startButton {
     margin-top: 40px;
@@ -74,4 +81,14 @@ canvas{
     50% {
         opacity: 0.7;
     }
+}
+
+#description-container {
+    transition: opacity 1s ease;
+    opacity: 1;
+}
+
+#description-container.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
