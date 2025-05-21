@@ -313,7 +313,7 @@ function showColorizedImage() {
             duration: 3000,
             ease: 'Power2',
             onComplete: () => {
-                showDescriptionText(currentImageIndex - 1); 
+                showDescriptionText(currentImageIndex - 1);
                 transitionTimer = setTimeout(fadeToNextImage, 6000);
                 transitionTimer = setTimeout(fadeToNextImage, 6000);
 
@@ -414,7 +414,7 @@ function showDescriptionText(index) {
     const descriptionContainer = document.getElementById('description-container');
     const descriptionText = document.getElementById('description-text');
     const fullText = imageDescriptions[index];
-    
+
     descriptionText.textContent = '';
     descriptionContainer.style.display = 'block';
 
@@ -442,6 +442,5 @@ function hideDescriptionText() {
         container.classList.remove('hidden');
     }, 1000); // correspond à la durée du `transition` CSS
 }
-
 
 
