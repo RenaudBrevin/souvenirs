@@ -27,6 +27,27 @@ const imageDescriptions = [
     `Souvenir 3 : Des fragments d’émotion que le présent effleure encore.`
 ];
 
+const overlay = document.getElementById('intro-overlay');
+const discoverBtn = document.getElementById('discover-btn');
+const audio = document.getElementById('intro-voix');
+audio.volume = 1;
+discoverBtn.addEventListener('click', () => {
+    console.log('Clic détecté, tentative de lecture audio...');
+    audio.volume = 1;
+  
+    audio.play()
+      .then(() => {
+        console.log('Audio lancé avec succès');
+      })
+      .catch(err => {
+        console.error('Erreur lors de la lecture audio :', err);
+      });
+  
+    overlay.classList.add('hidden');
+    storyText.style.display = 'block';
+  });
+  
+
 
 function setupPiecesPositions() {
     pieces = [];
@@ -313,7 +334,7 @@ function showColorizedImage() {
             duration: 3000,
             ease: 'Power2',
             onComplete: () => {
-                showDescriptionText(currentImageIndex - 1);
+                showDescriptionText(currentImageIndex - 1); 
                 transitionTimer = setTimeout(fadeToNextImage, 6000);
                 transitionTimer = setTimeout(fadeToNextImage, 6000);
 
@@ -374,12 +395,10 @@ function resetGame() {
 }
 
 
-// const storyText =
-//     
-// Chaque souvenir est comme une photo éclatée en mille fragments, parfois flous, parfois déformés par le temps. Comme les pièces d’un puzzle que l’on assemble patiemment, c’est en reconnectant chaque détail que se révèle la mémoire.
+const storyText = "Chaque souvenir est comme une photo éclatée en mille fragments, parfois flous, parfois déformés par le temps. Comme les pièces d’un puzzle que l’on assemble patiemment, c’est en reconnectant chaque détail que se révèle la mémoire.";
 // ;
 
-const storyText = 'texte ici';
+// const storyText = 'texte ici';
 
 const introTextEl = document.getElementById('intro-text');
 const startBtn = document.getElementById('startButton');
@@ -391,7 +410,7 @@ function typeWriter() {
     if (currentChar < storyText.length) {
         introTextEl.textContent += storyText.charAt(currentChar);
         currentChar++;
-        setTimeout(typeWriter, 50);
+        setTimeout(typeWriter, 65);
     } else {
         startBtn.style.display = 'visible';
         startBtn.classList.add('visible');
@@ -399,6 +418,12 @@ function typeWriter() {
         startBtn.style.pointerEvents = 'auto';
     }
 }
+
+//lancer typewrite quand overlaybutton clicqué
+const overlayButton = document.getElementById('discover-btn');
+overlayButton.addEventListener('click', () => {
+    typeWriter();
+});
 
 startBtn.addEventListener('click', () => {
     introContainer.classList.add('fade-out');
@@ -408,13 +433,11 @@ startBtn.addEventListener('click', () => {
     }, { once: true });
 });
 
-typeWriter();
-
 function showDescriptionText(index) {
     const descriptionContainer = document.getElementById('description-container');
     const descriptionText = document.getElementById('description-text');
     const fullText = imageDescriptions[index];
-
+    
     descriptionText.textContent = '';
     descriptionContainer.style.display = 'block';
 
@@ -442,5 +465,3 @@ function hideDescriptionText() {
         container.classList.remove('hidden');
     }, 1000); // correspond à la durée du `transition` CSS
 }
-
-
