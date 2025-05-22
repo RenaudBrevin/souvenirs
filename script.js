@@ -469,19 +469,9 @@ function showDescriptionText(index) {
     const descriptionText = document.getElementById('description-text');
     const fullText = imageDescriptions[index];
     
-    descriptionText.textContent = '';
-    descriptionContainer.style.display = 'block';
+    descriptionText.textContent = fullText;
+    descriptionContainer.style.opacity = '1';
 
-    let charIndex = 0;
-    function typeNextChar() {
-        if (charIndex < fullText.length) {
-            descriptionText.textContent += fullText.charAt(charIndex);
-            charIndex++;
-            setTimeout(typeNextChar, 20);
-        }
-    }
-
-    typeNextChar();
 }
 
 function hideDescriptionText() {
@@ -489,11 +479,9 @@ function hideDescriptionText() {
     const text = document.getElementById('description-text');
 
     text.textContent = '';
-    container.classList.add('hidden');
 
     setTimeout(() => {
-        container.style.display = 'none';
-        container.classList.remove('hidden');
+        container.style.opacity = '0';
     }, 1000);
 }
 
@@ -547,5 +535,3 @@ function outroduction() {
             
     });
 }
-// Fin de l'animation de transition
-// 

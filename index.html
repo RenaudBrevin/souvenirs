@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puzzle Automatique</title>
+    <title>Our memories</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 
 <body>
     
     <audio id="intro-voix" src="sound/intro_voix.mp3" muted autoplay></audio>
     <div id="intro-overlay">
-        <button id="discover-btn" onclick="document.getElementById('myAudio').play()">Click pour commencer l'aventure</button>
+        <button id="discover-btn" onclick="document.getElementById('myAudio').play()">Démarrer</button>
         <audio id="myAudio" src="sound/intro_voix.mp3"></audio>
       </div>
     <div id="start-container"
@@ -26,10 +27,7 @@
 
     <div id="game-container"></div>
     <div id="description-container" style="
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-           color: white; padding: 5px;
-           border-radius: 10px; max-width: 80%; text-align: center; font-size: 1.3em;
-           display: none; z-index: 1001;">
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; padding: 5px;border-radius: 10px; max-width: 80%; text-align: center; font-size: 1.3em; opacity: 0; pointer-events: none; z-index: 1001; transition: opacity 1s;">
         <span id="description-text"></span>
     </div>
 
