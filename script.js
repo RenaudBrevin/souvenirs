@@ -429,7 +429,6 @@ Chaque souvenir est comme une photo éclatée en mille fragments, parfois flous,
 `;
 
 // const storyText = 'texte ici';
-// const storyText = 'texte ici';
 
 const introTextEl = document.getElementById('intro-text');
 const startBtn = document.getElementById('startButton');
