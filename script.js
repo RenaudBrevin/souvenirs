@@ -69,7 +69,6 @@ function setupPiecesPositions() {
 // Gestionnaire pour le bouton "Démarrer"
 document.getElementById('startButton').addEventListener('click', function (e) {
     console.log(e)
-    e.target.style.display = 'none';
     startGame();
 });
 
@@ -92,7 +91,6 @@ function loadImage(imageSrc) {
 
     originalImage.onerror = function () {
         console.error("Erreur de chargement de l'image:", imageSrc);
-        // Afficher un message d'erreur à l'utilisateur
         alert("Impossible de charger l'image. Vérifiez que le fichier " + imageSrc + " existe.");
     };
 
@@ -330,22 +328,22 @@ function showColorizedImage() {
             duration: 4000,
             ease: 'Power2'
         });
+
+        showDescriptionText(currentImageIndex - 1);
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+        }
+
+        currentAudio = new Audio(imagePaths[currentImageIndex - 1].sound);
+        currentAudio.volume = 1;
+        currentAudio.play();
         myGame.tweens.add({
             targets: bgImage,
             alpha: 1,
             duration: 3000,
             ease: 'Power2',
             onComplete: () => {
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio = null;
-                }
-
-                currentAudio = new Audio(imagePaths[currentImageIndex - 1].sound);
-                currentAudio.volume = 1;
-                currentAudio.play();
-
-                showDescriptionText(currentImageIndex - 1);
                 transitionTimer = setTimeout(fadeToNextImage, 6000);
             }
         });
@@ -459,7 +457,10 @@ startBtn.addEventListener('click', () => {
     introContainer.classList.add('fade-out');
 
     introContainer.addEventListener('transitionend', () => {
-        introContainer.style.display = 'none';
+        introContainer.style.opacity = '0';
+        introContainer.style.pointerEvents = 'none';
+        //transition opacity
+        introContainer.style.transition = 'opacity 1s ease-in-out';
     }, { once: true });
 });
 
@@ -477,11 +478,9 @@ function hideDescriptionText() {
     const container = document.getElementById('description-container');
     const text = document.getElementById('description-text');
 
-    text.textContent = '';
-
     setTimeout(() => {
         container.style.opacity = '0';
-    }, 1000);
+    }, 800);
 }
 
 const endText = 'Les images brisées ont retrouvé leur unité. Et si tes propres souvenirs, eux aussi, attendaient d’être rassemblés ? Laisse les fragments remonter doucement. Prends le temps de les accueillir. Et de te souvenir.';
